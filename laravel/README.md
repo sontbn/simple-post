@@ -1,59 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Simple Post — Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A minimal blog-style app that implements the assessment features with **Laravel** + **Blade** + **DaisyUI (CDN)**:
 
-## About Laravel
+* Authentication: Sign Up, Sign In, Sign Out
+* Posts CRUD: list with pagination, show, create, edit, delete
+* Clean UI using DaisyUI components
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Laravel 11
+* SQLite (local dev)
+* Blade views styled with **DaisyUI** via CDN (no build tools required)
+* Pagination styled to DaisyUI
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Quick Start
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Single-shot setup (Install + Database)
 
-## Laravel Sponsors
+```bash
+# from repo root
+cd laravel
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# dependencies
+composer install
 
-### Premium Partners
+# env + app key
+cp .env.example .env
+php artisan key:generate
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# configure SQLite path in .env (example below)
+# DB_CONNECTION=sqlite
+# DB_DATABASE="/absolute/path/to/laravel/database/database.sqlite"
 
-## Contributing
+# create sqlite file and run migrations
+mkdir -p database
+: > database/database.sqlite
+php artisan migrate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# run dev server
+php artisan serve
+```
 
-## Code of Conduct
+> Make sure `DB_DATABASE` in `.env` points to the **absolute path** of `database/database.sqlite` on your machine.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Open: `http://localhost:8000`
 
-## Security Vulnerabilities
+Register a user from the UI, then create/edit/delete posts.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## UI
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+DaisyUI is loaded via CDN in `resources/views/layouts/app.blade.php`:
+
+```html
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+```
+
+Layout centering:
+
+* Shell: `container mx-auto px-4 md:px-6 lg:px-8 max-w-6xl`
+* Content column (list/detail): `mx-auto max-w-3xl`
+
+---
+
+## Project Structure
+
+This repo keeps each implementation in its own folder (`/laravel`, `/nextjs`).
+
+---
+
+## Notes
+
+* No asset pipeline required; CDN is enough.
+* You can later switch to Vite + Tailwind + daisyUI plugin with the same Blade markup.

@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Simple Post — Next.js (App Router)
 
-## Getting Started
+A minimal blog-style app that implements the assessment features with **Next.js 16**, **Prisma (SQLite)**, **NextAuth v4**, and **DaisyUI**:
 
-First, run the development server:
+* Authentication: Sign Up, Sign In, Sign Out
+* Posts CRUD: list with pagination, show, create, edit, delete
+* Clean UI using DaisyUI components (CDN)
+
+---
+
+## Tech
+
+* Next.js 16 (App Router)
+* Prisma + SQLite
+* NextAuth v4 (Credentials)
+* DaisyUI via CDN
+* TypeScript
+
+---
+
+## Quick Start
+
+### Single-shot setup (Install + DB + Run)
 
 ```bash
+# from repo root
+cd nextjs
+
+# deps
+npm install
+
+# env
+cp .env.example .env || true
+# If you don't have .env.example, create .env with the lines below
+# DATABASE_URL="file:./prisma/dev.db"
+# NEXTAUTH_URL="http://localhost:3000"
+# NEXTAUTH_SECRET="devsecret"
+
+# prisma
+npx prisma migrate dev --name init
+
+# dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open: `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Register or sign in from the UI, then create/edit/delete posts.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## UI
 
-To learn more about Next.js, take a look at the following resources:
+To exactly match the Laravel look, DaisyUI is loaded via CDN in `app/layout.tsx`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```tsx
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
+</head>
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Layout centering:
 
-## Deploy on Vercel
+* Shell: `container mx-auto px-4 md:px-6 lg:px-8 max-w-6xl`
+* Content column (list/detail): `mx-auto max-w-3xl`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If you prefer plugin mode instead of CDN:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm i daisyui @tailwindcss/typography
+```
+
+Then in `app/globals.css` (Tailwind v4 style):
+
+```css
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
+```
+
+Restart `npm run dev` after changing plugins.
+
+---
+
+## Environment
+
+`.env` used by Prisma and NextAuth:
+
+```
+DATABASE_URL="file:./prisma/dev.db"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="devsecret"
+```
+
+---
+
+## Notes
+
+* Using Next.js 16, dynamic route props like `params` and `searchParams` are Promises; pages in this project `await` them.
+* Prisma schema defines `User` and `Post` in `prisma/schema.prisma` and stores data in `prisma/dev.db`.
+* You can inspect data with `npx prisma studio`.
